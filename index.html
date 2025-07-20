@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Utility Project</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    h1 {
+      color: #222;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #333;
+    }
+    .section {
+      background: #fff;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .instructions {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 200px;
+    }
+    button {
+      margin: 5px 0;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16px;
+      color: #333;
+      transition: all 0.3s ease-in-out;
+    }
+    #output:empty::before {
+      content: "Output will appear here...";
+      color: #888;
+      font-style: italic;
+    }
+    @media (max-width: 600px) {
+      input[type="text"], input[type="number"] {
+        width: 100%;
+      }
+      #output {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>JavaScript Utility Project</h1>
+
+  <div class="section">
+    <h2>1. Join Elements of Array</h2>
+    <div class="instructions">Enter comma-separated values and choose a separator (e.g., Red,Green,White)</div>
+    <input type="text" id="joinInput" placeholder='e.g. Red,Green,White,Black'>
+    <select id="joinType">
+      <option value=",">Comma</option>
+      <option value="+">Plus</option>
+      <option value=" ">Space</option>
+    </select>
+    <button onclick="joinArray()">Join</button>
+  </div>
+
+  <div class="section">
+    <h2>2. Most Frequent Item</h2>
+    <div class="instructions">Enter comma-separated elements (e.g., 3,a,a,a,2,3) to find the most frequent</div>
+    <input type="text" id="freqInput" placeholder="e.g. 3,a,a,a,2,3">
+    <button onclick="mostFrequentItem()">Find Most Frequent</button>
+  </div>
+
+  <div class="section">
+    <h2>3. Truncate String</h2>
+    <div class="instructions">Enter a string and the length to truncate it (e.g., Robin Singh, 4)</div>
+    <input type="text" id="truncateStr" placeholder="Enter string">
+    <input type="number" id="truncateLen" placeholder="Length">
+    <button onclick="truncateExample()">Truncate</button>
+  </div>
+
+  <div class="section">
+    <h2>4. Capitalize Words</h2>
+    <div class="instructions">Enter a sentence to capitalize each word (e.g., js string exercises)</div>
+    <input type="text" id="capitalizeInput" placeholder="Enter a sentence">
+    <button onclick="capitalizeExample()">Capitalize</button>
+  </div>
+
+  <div class="section">
+    <h2>5. Filter Array Between Values</h2>
+    <div class="instructions">Enter a low value, high value, and comma-separated array (e.g., 3, 8, 1,5,95,0,4,7)</div>
+    <input type="number" id="lowVal" placeholder="Low">
+    <input type="number" id="highVal" placeholder="High">
+    <input type="text" id="filterArray" placeholder="e.g. 1,5,95,0,4,7">
+    <button onclick="arrBetweenExample()">Filter</button>
+  </div>
+
+  <div class="section">
+    <h2>6. Find Index</h2>
+    <div class="instructions">Enter a comma-separated array and value to search (e.g., a,g,y,d and value: d)</div>
+    <input type="text" id="indexArray" placeholder="e.g. a,g,y,d">
+    <input type="text" id="searchValue" placeholder="Value to find">
+    <button onclick="findIndexExamples()">Find Index</button>
+  </div>
+
+  <div id="output"></div>
+
+  <script>
+    function joinArray() {
+      let input = document.getElementById("joinInput").value;
+      let separator = document.getElementById("joinType").value;
+      let arr = input.split(',');
+      document.getElementById("output").textContent = arr.join(separator);
+    }
+
+    function mostFrequentItem() {
+      let arr = document.getElementById("freqInput").value.split(',');
+      let freqMap = {};
+      let maxCount = 0;
+      let mostFreqItem;
+      for (let item of arr) {
+        freqMap[item] = (freqMap[item] || 0) + 1;
+        if (freqMap[item] > maxCount) {
+          maxCount = freqMap[item];
+          mostFreqItem = item;
+        }
+      }
+      document.getElementById("output").textContent = `${mostFreqItem} ( ${maxCount} times )`;
+    }
+
+    function truncateExample() {
+      let str = document.getElementById("truncateStr").value;
+      let len = parseInt(document.getElementById("truncateLen").value);
+      document.getElementById("output").textContent = str.slice(0, len);
+    }
+
+    function capitalizeExample() {
+      let str = document.getElementById("capitalizeInput").value;
+      let capitalized = str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      document.getElementById("output").textContent = capitalized;
+    }
+
+    function arrBetweenExample() {
+      let low = parseFloat(document.getElementById("lowVal").value);
+      let high = parseFloat(document.getElementById("highVal").value);
+      let arr = document.getElementById("filterArray").value.split(',').map(Number);
+      let result = arr.filter(x => x > low && x < high);
+      document.getElementById("output").textContent = JSON.stringify(result);
+    }
+
+    function findIndexExamples() {
+      let arr = document.getElementById("indexArray").value.split(',');
+      let val = document.getElementById("searchValue").value;
+      let index = arr.indexOf(val);
+      document.getElementById("output").textContent = `Index of '${val}': ${index}`;
+    }
+  </script>
+</body>
+</html>
